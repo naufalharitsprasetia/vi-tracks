@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Approval;
+use App\Models\Log;
 use App\Models\VehicleOrder;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -29,16 +31,37 @@ class DashboardController extends Controller
                 ->limit(5)
                 ->get();
 
-            $chartData = [
-                'APPROVED' => ($statusStats['APPROVED'] ?? 0) / $totalOrders,
-                'COMPLETED' => ($statusStats['COMPLETED'] ?? 0) / $totalOrders,
-                'PENDING'  => ($statusStats['PENDING'] ?? 0) / $totalOrders,
-                'REJECTED' => ($statusStats['REJECTED'] ?? 0) / $totalOrders,
-            ];
+            if ($totalOrders > 0) {
+                $chartData = [
+                    'APPROVED' => ($statusStats['APPROVED'] ?? 0) / $totalOrders,
+                    'COMPLETED' => ($statusStats['COMPLETED'] ?? 0) / $totalOrders,
+                    'PENDING'  => ($statusStats['PENDING'] ?? 0) / $totalOrders,
+                    'REJECTED' => ($statusStats['REJECTED'] ?? 0) / $totalOrders,
+                ];
+            } else {
+                $chartData = [
+                    'APPROVED' => 0,
+                    'COMPLETED' => 0,
+                    'PENDING'  => 0,
+                    'REJECTED' => 0,
+                ];
+            }
 
             return view('admin.dashboard', compact('totalOrders', 'chartData', 'statusStats', 'topVehicles', 'newestOrders', 'totalOrdersToday', 'pendingOrders', 'completedOrders'));
         } else {
-            return view('approver.dashboard');
+            $pendingApprovals = Approval::where('approver_id', Auth::user()->id)->where('status', 'PENDING')->get();
+            return view('approver.dashboard', compact('pendingApprovals'));
         }
+    }
+
+    public function reports()
+    {
+        return view('admin.reports');
+    }
+
+    public function logs()
+    {
+        $logs = Log::latest()->get();
+        return view('admin.logs', compact('logs'));
     }
 }

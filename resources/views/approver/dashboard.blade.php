@@ -3,7 +3,7 @@
 @section('content')
 <div class="space-y-8">
     <!-- Welcome Section -->
-    <div class="bg-gradient-to-r from-indigo-600 to-purple-800 text-white rounded-2xl p-8 shadow-lg">
+    <div class="bg-linear-to-r from-indigo-600 to-purple-800 text-white rounded-2xl p-8 shadow-lg">
         <h1 class="text-4xl font-bold mb-2">Selamat Datang, {{ auth()->user()->name }}</h1>
         <p class="text-indigo-100">Tinjau dan setujui/tolak pemesanan kendaraan secara efisien</p>
     </div>
@@ -118,12 +118,14 @@
         </div>
 
         <div class="divide-y divide-gray-200">
+            @foreach ($pendingApprovals as $approval)
             <!-- Order Card 1 -->
             <div class="p-6 hover:bg-gray-50 transition-colors border-l-4 border-yellow-500">
                 <div class="flex items-start justify-between mb-4">
                     <div>
-                        <h4 class="text-lg font-bold text-gray-900">#ORD-2024-001</h4>
-                        <p class="text-sm text-gray-600">Requested by: John Doe (Sales Dept)</p>
+                        <h4 class="text-lg font-bold text-gray-900">{{ $approval->order->order_code }}</h4>
+                        <p class="text-sm text-gray-600">Requested by: {{ $approval->order->requester_name }}
+                            ({{$approval->order->department}} Departement)</p>
                     </div>
                     <span class="px-3 py-1 bg-yellow-100 text-yellow-800 text-xs font-semibold rounded-full">Awaiting
                         Level 2</span>
@@ -131,24 +133,27 @@
 
                 <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-4">
                     <div>
-                        <p class="text-xs text-gray-600 font-semibold">Vehicle</p>
-                        <p class="text-sm font-medium text-gray-900">Toyota Avanza</p>
+                        <p class="text-xs text-gray-600 font-semibold">Kendaraan</p>
+                        <p class="text-sm font-medium text-gray-900">{{$approval->order->vehicle->brand}}
+                            ({{$approval->order->vehicle->plate_number}})</p>
                     </div>
                     <div>
                         <p class="text-xs text-gray-600 font-semibold">Date</p>
-                        <p class="text-sm font-medium text-gray-900">Mar 5-7, 2024</p>
+                        <p class="text-sm font-medium text-gray-900">{{ $approval->order->booking_date }} s/d {{
+                            $approval->order->return_date }}</p>
                     </div>
                     <div>
                         <p class="text-xs text-gray-600 font-semibold">Driver</p>
-                        <p class="text-sm font-medium text-gray-900">Budi Santoso</p>
+                        <p class="text-sm font-medium text-gray-900">{{ $approval->order->driver->name }}</p>
                     </div>
                     <div>
                         <p class="text-xs text-gray-600 font-semibold">Priority</p>
-                        <p class="text-sm font-medium text-red-600">High</p>
+                        <p class="text-sm font-medium text-red-600">{{ $approval->order->priority }}</p>
                     </div>
                 </div>
 
-                <p class="text-sm text-gray-600 mb-4"><strong>Purpose:</strong> Client presentation at Jakarta office
+                <p class="text-sm text-gray-600 mb-4"><strong>Destination/Purpose:</strong> {{
+                    $approval->order->destination }}
                 </p>
 
                 <!-- Approval Timeline -->
@@ -189,92 +194,7 @@
                     </button>
                 </div>
             </div>
-
-            <!-- Order Card 2 -->
-            <div class="p-6 hover:bg-gray-50 transition-colors border-l-4 border-yellow-500">
-                <div class="flex items-start justify-between mb-4">
-                    <div>
-                        <h4 class="text-lg font-bold text-gray-900">#ORD-2024-002</h4>
-                        <p class="text-sm text-gray-600">Requested by: Sarah Smith (Marketing)</p>
-                    </div>
-                    <span class="px-3 py-1 bg-yellow-100 text-yellow-800 text-xs font-semibold rounded-full">Awaiting
-                        Level 2</span>
-                </div>
-
-                <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-4">
-                    <div>
-                        <p class="text-xs text-gray-600 font-semibold">Vehicle</p>
-                        <p class="text-sm font-medium text-gray-900">Honda CR-V</p>
-                    </div>
-                    <div>
-                        <p class="text-xs text-gray-600 font-semibold">Date</p>
-                        <p class="text-sm font-medium text-gray-900">Mar 4, 2024</p>
-                    </div>
-                    <div>
-                        <p class="text-xs text-gray-600 font-semibold">Driver</p>
-                        <p class="text-sm font-medium text-gray-900">Ahmad Riyadi</p>
-                    </div>
-                    <div>
-                        <p class="text-xs text-gray-600 font-semibold">Priority</p>
-                        <p class="text-sm font-medium text-blue-600">Normal</p>
-                    </div>
-                </div>
-
-                <p class="text-sm text-gray-600 mb-4"><strong>Purpose:</strong> Product launch event at Bali</p>
-
-                <!-- Approval Timeline -->
-                <div class="bg-gray-50 rounded-lg p-4 mb-4 text-xs">
-                    <p class="font-semibold text-gray-700 mb-3">Approval Status:</p>
-                    <div class="flex items-center gap-3">
-                        <div class="text-center">
-                            <div
-                                class="w-8 h-8 bg-green-500 text-white rounded-full flex items-center justify-center text-sm font-bold">
-                                ✓</div>
-                            <p class="text-xs mt-1 text-gray-600">Admin<br>Created</p>
-                        </div>
-                        <div class="flex-1 border-b-2 border-green-500"></div>
-                        <div class="text-center">
-                            <div
-                                class="w-8 h-8 bg-green-500 text-white rounded-full flex items-center justify-center text-sm font-bold">
-                                ✓</div>
-                            <p class="text-xs mt-1 text-gray-600">Manager<br>Approved</p>
-                        </div>
-                        <div class="flex-1 border-b-2 border-gray-300"></div>
-                        <div class="text-center">
-                            <div
-                                class="w-8 h-8 bg-yellow-400 text-white rounded-full flex items-center justify-center text-sm font-bold">
-                                ?</div>
-                            <p class="text-xs mt-1 text-gray-600">Director<br>Pending</p>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="flex gap-3">
-                    <button onclick="openApprovalModal()"
-                        class="flex-1 px-4 py-2 bg-green-600 hover:bg-green-700 text-white font-semibold rounded-lg transition-all">
-                        Approve
-                    </button>
-                    <button onclick="openRejectionModal()"
-                        class="flex-1 px-4 py-2 bg-red-600 hover:bg-red-700 text-white font-semibold rounded-lg transition-all">
-                        Reject
-                    </button>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <!-- Quick Actions -->
-    <div class="bg-gradient-to-r from-indigo-500 to-purple-600 rounded-xl shadow-lg p-8 text-white">
-        <h3 class="text-xl font-bold mb-4">Quick Actions</h3>
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <a href=""
-                class="bg-white bg-opacity-20 hover:bg-opacity-30 backdrop-blur-sm px-6 py-3 rounded-lg font-semibold transition-all text-center">
-                Review All Pending Orders
-            </a>
-            <a href=""
-                class="bg-white bg-opacity-20 hover:bg-opacity-30 backdrop-blur-sm px-6 py-3 rounded-lg font-semibold transition-all text-center">
-                View Approval History
-            </a>
+            @endforeach
         </div>
     </div>
 </div>

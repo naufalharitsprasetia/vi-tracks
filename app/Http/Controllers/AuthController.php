@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Helpers\ActivityLogger;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -25,7 +26,10 @@ class AuthController extends Controller
             'password' => $credentials['password'],
         ])) {
             $request->session()->regenerate();
-
+            ActivityLogger::log(
+                'LOGIN',
+                'User login ke sistem'
+            );
             return redirect()->route('dashboard');
         }
 

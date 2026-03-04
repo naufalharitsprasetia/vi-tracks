@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\ApprovalController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\DriverController;
@@ -18,6 +19,10 @@ Route::group(['middleware' => 'auth'], function () {
     // Dashboard
     Route::get('/', [DashboardController::class, 'index'])->name('home');
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
+    // Reports
+    Route::get('/reports', [DashboardController::class, 'reports'])->name('admin.reports');
+    // Logs
+    Route::get('/logs', [DashboardController::class, 'logs'])->name('admin.logs');
 
     // Orders
     Route::get('/orders', [VehicleOrderController::class, 'index'])->name('admin.orders');
@@ -25,9 +30,6 @@ Route::group(['middleware' => 'auth'], function () {
     Route::post('/orders/new', [VehicleOrderController::class, 'store'])->name('admin.orders.store');
     // Route::get('/orders/{id}', [VehicleOrderController::class, 'show'])->name('admin.orders.show');
     // Route::get('/orders/{id}/edit', [VehicleOrderController::class, 'edit'])->name('admin.orders.edit');
-
-    // Reports
-    Route::view('/reports', 'admin.reports')->name('admin.reports');
 
     // Drivers
     Route::get('/drivers', [DriverController::class, 'index'])->name('admin.drivers');
@@ -40,6 +42,6 @@ Route::group(['middleware' => 'auth'], function () {
     Route::post('/vehicles', [VehicleController::class, 'store'])->name('admin.vehicles.store');
 
     // Approver
-    Route::view('/history-approver', 'approver.history')->name('approver.history');
-    Route::view('/pending-approver', 'approver.pending')->name('approver.pending');
+    Route::get('/pending-approver', [ApprovalController::class, 'pendingApprovals'])->name('approver.pending');
+    Route::get('/history-approver', [ApprovalController::class, 'historyApprovals'])->name('approver.history');
 });

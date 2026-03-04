@@ -15,10 +15,10 @@
         <div class="flex items-center gap-4">
             @if (auth()->user()->role === 'admin')
             {{-- Logs --}}
-            <div
+            <a href="{{ route('admin.logs') }}"
                 class="bg-gray-100 dark:bg-gray-700 text-gray-800 dark:text-gray-200 px-3 py-2 rounded-lg text-sm font-medium hover:bg-gray-300 dark:hover:bg-gray-600 cursor-pointer">
                 Logs
-            </div>
+            </a>
             @endif
 
             <!-- User Profile -->
