@@ -1,4 +1,4 @@
-# 🚗 Fleet Vehicle Ordering System
+# 🚗 Vi-Tracks (Vehicles Tracking App)
 
 Aplikasi web untuk **pemesanan dan monitoring kendaraan operasional** perusahaan tambang nikel dengan sistem persetujuan berjenjang.
 
@@ -6,7 +6,7 @@ Aplikasi web untuk **pemesanan dan monitoring kendaraan operasional** perusahaan
 
 ## 📌 Deskripsi Aplikasi
 
-Fleet Vehicle Ordering System adalah aplikasi berbasis web yang digunakan untuk:
+Vi-Tracks adalah aplikasi berbasis web yang digunakan untuk:
 
 - Mengelola pemesanan kendaraan operasional
 - Mengatur driver dan kendaraan
@@ -14,7 +14,7 @@ Fleet Vehicle Ordering System adalah aplikasi berbasis web yang digunakan untuk:
 - Monitoring status pemesanan melalui dashboard
 - Menyediakan laporan pemesanan yang dapat diekspor
 
-Aplikasi ini dibuat sebagai bagian dari **Technical Test Fullstack Developer (Intern)**.
+Aplikasi ini dibuat sebagai bagian dari **Technical Test Fullstack Developer (Intern) Sekawan Media**.
 
 ---
 
