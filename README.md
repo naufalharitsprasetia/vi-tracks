@@ -12,7 +12,7 @@ Vi-Tracks adalah aplikasi berbasis web yang digunakan untuk:
 - Mengatur driver dan kendaraan
 - Melakukan persetujuan pemesanan secara berjenjang
 - Monitoring status pemesanan melalui dashboard
-- Menyediakan laporan pemesanan yang dapat diekspor
+- Menyediakan laporan pemesanan yang dapat diekspor dalam bentuk excel
 
 Aplikasi ini dibuat sebagai bagian dari **Technical Test Fullstack Developer (Intern) Sekawan Media**.
 
@@ -27,6 +27,7 @@ Aplikasi ini dibuat sebagai bagian dari **Technical Test Fullstack Developer (In
 - Menentukan approver level 1 dan level 2
 - Melihat seluruh data pemesanan
 - Melihat dashboard dan laporan
+- Melihat log aktifitas
 
 ### 2️⃣ Approver (Penyetuju)
 
@@ -39,26 +40,27 @@ Aplikasi ini dibuat sebagai bagian dari **Technical Test Fullstack Developer (In
 ## 🔄 Alur Persetujuan
 
 1. Admin membuat pemesanan kendaraan
-2. Approver Level 1 melakukan peninjauan awal
+2. Approver Level 1 melakukan peninjauan awal dan menyetujuinya
 3. Approver Level 2 melakukan persetujuan akhir
 4. Status pemesanan akan berubah menjadi:
     - `PENDING`
+    - `IN PROGRESS`
     - `APPROVED`
     - `REJECTED`
+    - `IN USE`
     - `COMPLETED`
 
 ---
 
 ## 🧱 Teknologi yang Digunakan
 
-| Teknologi      | Versi                |
-| -------------- | -------------------- |
-| PHP            | 8.2                  |
-| Laravel        | 10.x                 |
-| Database       | MySQL 8.x            |
-| Frontend       | Blade + Tailwind CSS |
-| Chart          | SVG / Chart.js       |
-| Authentication | Laravel Auth         |
+| Teknologi | Versi                |
+| --------- | -------------------- |
+| Laravel   | 12                   |
+| PHP       | 8.4                  |
+| Database  | SQlite               |
+| Frontend  | Blade + Tailwind CSS |
+| Chart     | SVG / Chart.js       |
 
 ---
 
@@ -146,8 +148,6 @@ Dashboard menampilkan:
     - Pending
     - Rejected
 
-> Grafik disesuaikan langsung dari data database (tidak hardcode)
-
 ---
 
 ## 📤 Export Laporan
@@ -159,11 +159,11 @@ Dashboard menampilkan:
 
 ## 🔐 Akun Dummy (Seeder)
 
-| Role             | Email               | Password |
-| ---------------- | ------------------- | -------- |
-| Admin            | admin@fleet.test    | password |
-| Approver Level 1 | manager@fleet.test  | password |
-| Approver Level 2 | director@fleet.test | password |
+| Role             | Email                 | Password |
+| ---------------- | --------------------- | -------- |
+| Admin            | admin@vitracks.com    | password |
+| Approver Level 1 | manager@vitracks.com  | password |
+| Approver Level 2 | director@vitracks.com | password |
 
 ---
 
@@ -171,11 +171,12 @@ Dashboard menampilkan:
 
 ```bash
 git clone <repository-url>
-cd fleet-vehicle-system
+cd vi-tracks
 composer install
 cp .env.example .env
 php artisan key:generate
 php artisan migrate --seed
+npm run build
 php artisan serve
 ```
 
@@ -187,9 +188,9 @@ http://127.0.0.1:8000
 
 ## 📝 Catatan Tambahan
 
-Aplikasi menggunakan soft logic approval sehingga mudah dikembangkan menjadi 3 level atau lebih
-Struktur database mendukung pengembangan fitur BBM dan service kendaraan
-UI dibuat responsive dan mobile-friendly
+- Aplikasi menggunakan soft logic approval sehingga mudah dikembangkan menjadi 3 level atau lebih
+- Struktur database mendukung pengembangan fitur BBM dan service kendaraan untuk tahap pengembangan selanjutnya
+- UI dibuat responsive dan mobile-friendly
 
 ## 👨‍💻 Author
 
