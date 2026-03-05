@@ -13,4 +13,8 @@ class Approval extends Model
     {
         return $this->belongsTo(VehicleOrder::class, 'vehicle_order_id');
     }
+    public function approver()
+    {
+        return $this->belongsTo(User::class, 'approver_id');
+    }
 }

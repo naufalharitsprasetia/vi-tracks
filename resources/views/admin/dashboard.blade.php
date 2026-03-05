@@ -78,11 +78,15 @@
         $completed = $chartData['COMPLETED'] * $circumference;
         $pending = $chartData['PENDING'] * $circumference;
         $rejected = $chartData['REJECTED'] * $circumference;
+        $inProgress = $chartData['IN_PROGRESS'] * $circumference;
+        $inUse = $chartData['IN_USE'] * $circumference;
 
         $offset1 = 0;
         $offset2 = -$approved;
         $offset3 = -($approved + $completed);
         $offset4 = -($approved + $completed + $pending);
+        $offset5 = -($approved + $completed + $pending + $rejected);
+        $offset6 = -($approved + $completed + $pending + $rejected + $inProgress);
         @endphp
         <!-- Approval Status Chart -->
         <div class="bg-white rounded-xl shadow-md p-6">
@@ -112,6 +116,15 @@
                         <circle cx="50" cy="50" r="45" fill="none" stroke="#ef4444" stroke-width="10"
                             stroke-dasharray="{{ $rejected }} {{ $circumference }}"
                             stroke-dashoffset="{{ $offset4 }}" />
+
+                        <!-- In Progress -->
+                        <circle cx="50" cy="50" r="45" fill="none" stroke="#f59e0b" stroke-width="10"
+                            stroke-dasharray="{{ $inProgress }} {{ $circumference }}"
+                            stroke-dashoffset="{{ $offset5 }}" />
+
+                        <!-- In Use -->
+                        <circle cx="50" cy="50" r="45" fill="none" stroke="#8b5cf6" stroke-width="10"
+                            stroke-dasharray="{{ $inUse }} {{ $circumference }}" stroke-dashoffset="{{ $offset6 }}" />
                     </svg>
                     <div class="absolute inset-0 flex items-center justify-center">
                         <span class="text-2xl font-bold text-gray-900">{{$totalOrders}}</span>
@@ -136,6 +149,16 @@
                     <div class="flex items-center gap-3">
                         <div class="w-3 h-3 bg-red-600 rounded-full"></div>
                         <span class="text-sm text-gray-700">Rejected: <strong>{{ $statusStats['REJECTED'] ?? 0
+                                }}</strong></span>
+                    </div>
+                    <div class="flex items-center gap-3">
+                        <div class="w-3 h-3 bg-yellow-500 rounded-full"></div>
+                        <span class="text-sm text-gray-700">In Progress: <strong>{{ $statusStats['IN_PROGRESS'] ?? 0
+                                }}</strong></span>
+                    </div>
+                    <div class="flex items-center gap-3">
+                        <div class="w-3 h-3 bg-purple-600 rounded-full"></div>
+                        <span class="text-sm text-gray-700">In Use: <strong>{{ $statusStats['IN_USE'] ?? 0
                                 }}</strong></span>
                     </div>
                 </div>

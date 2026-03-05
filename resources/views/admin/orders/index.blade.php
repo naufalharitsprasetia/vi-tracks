@@ -47,7 +47,8 @@
                             $order->status }}</span>
                     </td>
                     <td class="px-6 py-4">
-                        <a href="#" class="text-blue-600 hover:text-blue-800 font-semibold text-sm">View</a>
+                        <a href="{{ route('admin.orders.show', $order->order_code) }}"
+                            class="text-blue-600 hover:text-blue-800 font-semibold text-sm">View</a>
                     </td>
                 </tr>
                 @endforeach

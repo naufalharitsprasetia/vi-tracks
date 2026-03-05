@@ -28,7 +28,7 @@ Route::group(['middleware' => 'auth'], function () {
     Route::get('/orders', [VehicleOrderController::class, 'index'])->name('admin.orders');
     Route::get('/orders/new', [VehicleOrderController::class, 'create'])->name('admin.orders.create');
     Route::post('/orders/new', [VehicleOrderController::class, 'store'])->name('admin.orders.store');
-    // Route::get('/orders/{id}', [VehicleOrderController::class, 'show'])->name('admin.orders.show');
+    Route::get('/orders/{id}', [VehicleOrderController::class, 'show'])->name('admin.orders.show');
     // Route::get('/orders/{id}/edit', [VehicleOrderController::class, 'edit'])->name('admin.orders.edit');
 
     // Drivers
@@ -44,4 +44,9 @@ Route::group(['middleware' => 'auth'], function () {
     // Approver
     Route::get('/pending-approver', [ApprovalController::class, 'pendingApprovals'])->name('approver.pending');
     Route::get('/history-approver', [ApprovalController::class, 'historyApprovals'])->name('approver.history');
+    Route::post('/approval-approve/{approval}', [ApprovalController::class, 'approve'])
+        ->name('approval.approve');
+
+    Route::post('/approval-reject/{approval}', [ApprovalController::class, 'reject'])
+        ->name('approval.reject');
 });

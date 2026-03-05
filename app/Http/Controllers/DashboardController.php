@@ -37,6 +37,8 @@ class DashboardController extends Controller
                     'COMPLETED' => ($statusStats['COMPLETED'] ?? 0) / $totalOrders,
                     'PENDING'  => ($statusStats['PENDING'] ?? 0) / $totalOrders,
                     'REJECTED' => ($statusStats['REJECTED'] ?? 0) / $totalOrders,
+                    'IN_PROGRESS' => ($statusStats['IN_PROGRESS'] ?? 0) / $totalOrders,
+                    'IN_USE' => ($statusStats['IN_USE'] ?? 0) / $totalOrders,
                 ];
             } else {
                 $chartData = [
@@ -44,13 +46,26 @@ class DashboardController extends Controller
                     'COMPLETED' => 0,
                     'PENDING'  => 0,
                     'REJECTED' => 0,
+                    'IN_PROGRESS' => 0,
+                    'IN_USE' => 0,
                 ];
             }
 
             return view('admin.dashboard', compact('totalOrders', 'chartData', 'statusStats', 'topVehicles', 'newestOrders', 'totalOrdersToday', 'pendingOrders', 'completedOrders'));
         } else {
-            $pendingApprovals = Approval::where('approver_id', Auth::user()->id)->where('status', 'PENDING')->get();
-            return view('approver.dashboard', compact('pendingApprovals'));
+            if (Auth::user()->approval_level == 1) {
+                $pendingApprovals = Approval::where('approver_id', Auth::user()->id)->where('status', 'PENDING')->get();
+                $totalRejected = Approval::where('approver_id', Auth::user()->id)->where('status', 'REJECTED')->count();
+                $totalApproved = Approval::where('approver_id', Auth::user()->id)->where('status', 'APPROVED')->count();
+            } else if (Auth::user()->approval_level == 2) {
+                $pendingApprovals = Approval::where('approver_id', Auth::user()->id)->where('status', 'PENDING')->get();
+                $pendingApprovals = $pendingApprovals->filter(function ($approval) {
+                    return $approval->order->status == 'IN_PROGRESS';
+                });
+                $totalRejected = Approval::where('approver_id', Auth::user()->id)->where('status', 'REJECTED')->count();
+                $totalApproved = Approval::where('approver_id', Auth::user()->id)->where('status', 'APPROVED')->count();
+            }
+            return view('approver.dashboard', compact('pendingApprovals', 'totalRejected', 'totalApproved'));
         }
     }
 

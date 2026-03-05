@@ -15,7 +15,7 @@
             <div class="flex items-center justify-between">
                 <div>
                     <p class="text-gray-600 text-sm font-medium">Tinjauan yang Tertunda</p>
-                    <p class="text-3xl font-bold text-gray-900 mt-2">1</p>
+                    <p class="text-3xl font-bold text-gray-900 mt-2">{{ $pendingApprovals->count() }}</p>
                     <p class="text-yellow-600 text-xs mt-2 font-semibold">Menunggu tindakan Anda</p>
                 </div>
                 <div class="w-12 h-12 bg-yellow-100 rounded-lg flex items-center justify-center">
@@ -32,7 +32,7 @@
             <div class="flex items-center justify-between">
                 <div>
                     <p class="text-gray-600 text-sm font-medium">Disetujui Bulan Ini</p>
-                    <p class="text-3xl font-bold text-gray-900 mt-2">1</p>
+                    <p class="text-3xl font-bold text-gray-900 mt-2">{{ $totalApproved }}</p>
                     <p class="text-green-600 text-xs mt-2 font-semibold">Berhasil diproses</p>
                 </div>
                 <div class="w-12 h-12 bg-green-100 rounded-lg flex items-center justify-center">
@@ -49,7 +49,7 @@
             <div class="flex items-center justify-between">
                 <div>
                     <p class="text-gray-600 text-sm font-medium">Ditolak Bulan Ini</p>
-                    <p class="text-3xl font-bold text-gray-900 mt-2">1</p>
+                    <p class="text-3xl font-bold text-gray-900 mt-2">{{ $totalRejected }}</p>
                     <p class="text-red-600 text-xs mt-2 font-semibold">Tidak disetujui</p>
                 </div>
                 <div class="w-12 h-12 bg-red-100 rounded-lg flex items-center justify-center">
@@ -148,7 +148,16 @@
                     </div>
                     <div>
                         <p class="text-xs text-gray-600 font-semibold">Priority</p>
-                        <p class="text-sm font-medium text-red-600">{{ $approval->order->priority }}</p>
+                        @php
+                        if($approval->order->priority == 'urgent') {
+                        $textPriority = 'text-red-600';
+                        } elseif($approval->order->priority == 'high') {
+                        $textPriority = 'text-yellow-600';
+                        } else {
+                        $textPriority = 'text-blue-600';
+                        }
+                        @endphp
+                        <p class="text-sm font-medium {{ $textPriority }}">{{ $approval->order->priority }}</p>
                     </div>
                 </div>
 
@@ -156,7 +165,35 @@
                     $approval->order->destination }}
                 </p>
 
-                <!-- Approval Timeline -->
+                @if($approval->level == 1)
+                <!-- Approval Timeline level 1 -->
+                <div class="bg-gray-50 rounded-lg p-4 mb-4 text-xs">
+                    <p class="font-semibold text-gray-700 mb-3">Approval Status:</p>
+                    <div class="flex items-center gap-3">
+                        <div class="text-center">
+                            <div
+                                class="w-8 h-8 bg-green-500 text-white rounded-full flex items-center justify-center text-sm font-bold">
+                                ✓</div>
+                            <p class="text-xs mt-1 text-gray-600">Admin<br>Created</p>
+                        </div>
+                        <div class="flex-1 border-b-2 border-yellow-300"></div>
+                        <div class="text-center">
+                            <div
+                                class="w-8 h-8 bg-yellow-400 text-white rounded-full flex items-center justify-center text-sm font-bold">
+                                ?</div>
+                            <p class="text-xs mt-1 text-gray-600">Manager<br>Approved</p>
+                        </div>
+                        <div class="flex-1 border-b-2 border-gray-300"></div>
+                        <div class="text-center">
+                            <div
+                                class="w-8 h-8 bg-yellow-400 text-white rounded-full flex items-center justify-center text-sm font-bold">
+                                ?</div>
+                            <p class="text-xs mt-1 text-gray-600">Director<br>Pending</p>
+                        </div>
+                    </div>
+                </div>
+                @elseif($approval->level == 2)
+                <!-- Approval Timeline level 2 -->
                 <div class="bg-gray-50 rounded-lg p-4 mb-4 text-xs">
                     <p class="font-semibold text-gray-700 mb-3">Approval Status:</p>
                     <div class="flex items-center gap-3">
@@ -182,14 +219,14 @@
                         </div>
                     </div>
                 </div>
-
+                @endif
                 <div class="flex gap-3">
-                    <button onclick="openApprovalModal()"
-                        class="flex-1 px-4 py-2 bg-green-600 hover:bg-green-700 text-white font-semibold rounded-lg transition-all">
+                    <button onclick="openApprovalModal({{$approval->id}})"
+                        class="cursor-pointer flex-1 px-4 py-2 bg-green-600 hover:bg-green-700 text-white font-semibold rounded-lg transition-all">
                         Approve
                     </button>
-                    <button onclick="openRejectionModal()"
-                        class="flex-1 px-4 py-2 bg-red-600 hover:bg-red-700 text-white font-semibold rounded-lg transition-all">
+                    <button onclick="openRejectionModal({{$approval->id}})"
+                        class="cursor-pointer flex-1 px-4 py-2 bg-red-600 hover:bg-red-700 text-white font-semibold rounded-lg transition-all">
                         Reject
                     </button>
                 </div>
@@ -203,20 +240,24 @@
 <div id="approvalModal" class="hidden fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center p-4">
     <div class="bg-white rounded-xl shadow-2xl max-w-md w-full p-6">
         <h3 class="text-xl font-bold text-gray-900 mb-4">Approve Order</h3>
-        <p class="text-gray-600 mb-4">Are you sure you want to approve this order? The requester will be notified.</p>
-        <textarea placeholder="Add approval notes (optional)"
-            class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500 mb-4"
-            rows="3"></textarea>
-        <div class="flex gap-3">
-            <button onclick="closeApprovalModal()"
-                class="flex-1 px-4 py-2 border border-gray-300 text-gray-700 font-semibold rounded-lg hover:bg-gray-50 transition-all">
-                Cancel
-            </button>
-            <button onclick="submitApproval()"
-                class="flex-1 px-4 py-2 bg-green-600 hover:bg-green-700 text-white font-semibold rounded-lg transition-all">
-                Confirm Approval
-            </button>
-        </div>
+        <form method="POST" id="approvalForm">
+            @csrf
+            <p class="text-gray-600 mb-4">Are you sure you want to approve this order? The requester will be notified.
+            </p>
+            <textarea placeholder="Add approval notes (optional)" name="note"
+                class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500 mb-4"
+                rows="3"></textarea>
+            <div class="flex gap-3">
+                <button onclick="closeApprovalModal()"
+                    class="cursor-pointer flex-1 px-4 py-2 border border-gray-300 text-gray-700 font-semibold rounded-lg hover:bg-gray-50 transition-all">
+                    Cancel
+                </button>
+                <button onclick="submitApproval()"
+                    class="cursor-pointer flex-1 px-4 py-2 bg-green-600 hover:bg-green-700 text-white font-semibold rounded-lg transition-all">
+                    Confirm Approval
+                </button>
+            </div>
+        </form>
     </div>
 </div>
 
@@ -224,48 +265,45 @@
 <div id="rejectionModal" class="hidden fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center p-4">
     <div class="bg-white rounded-xl shadow-2xl max-w-md w-full p-6">
         <h3 class="text-xl font-bold text-gray-900 mb-4">Reject Order</h3>
-        <p class="text-gray-600 mb-4">Please provide a reason for rejection:</p>
-        <textarea placeholder="Reason for rejection..."
-            class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500 mb-4"
-            rows="3" required></textarea>
-        <div class="flex gap-3">
-            <button onclick="closeRejectionModal()"
-                class="flex-1 px-4 py-2 border border-gray-300 text-gray-700 font-semibold rounded-lg hover:bg-gray-50 transition-all">
-                Cancel
-            </button>
-            <button onclick="submitRejection()"
-                class="flex-1 px-4 py-2 bg-red-600 hover:bg-red-700 text-white font-semibold rounded-lg transition-all">
-                Confirm Rejection
-            </button>
-        </div>
+        <form method="POST" id="rejectionForm">
+            @csrf
+            <p class="text-gray-600 mb-4">Please provide a reason for rejection:</p>
+            <textarea placeholder="Reason for rejection..." name="note" required
+                class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500 mb-4"
+                rows="3" required></textarea>
+            <div class="flex gap-3">
+                <button onclick="closeRejectionModal()" type="button"
+                    class="cursor-pointer flex-1 px-4 py-2 border border-gray-300 text-gray-700 font-semibold rounded-lg hover:bg-gray-50 transition-all">
+                    Cancel
+                </button>
+                <button onclick="submitRejection()"
+                    class="cursor-pointer lex-1 px-4 py-2 bg-red-600 hover:bg-red-700 text-white font-semibold rounded-lg transition-all">
+                    Confirm Rejection
+                </button>
+            </div>
+        </form>
     </div>
 </div>
 
 <script>
-    function openApprovalModal() {
-            document.getElementById('approvalModal').classList.remove('hidden');
-        }
+    function openApprovalModal(id) {
+    const form = document.getElementById('approvalForm');
+    form.action = `/approval-approve/${id}`;
+    document.getElementById('approvalModal').classList.remove('hidden');
+}
 
-        function closeApprovalModal() {
-            document.getElementById('approvalModal').classList.add('hidden');
-        }
+function closeApprovalModal() {
+    document.getElementById('approvalModal').classList.add('hidden');
+}
 
-        function openRejectionModal() {
-            document.getElementById('rejectionModal').classList.remove('hidden');
-        }
+function openRejectionModal(id) {
+    const form = document.getElementById('rejectionForm');
+    form.action = `/approval-reject/${id}`;
+    document.getElementById('rejectionModal').classList.remove('hidden');
+}
 
-        function closeRejectionModal() {
-            document.getElementById('rejectionModal').classList.add('hidden');
-        }
-
-        function submitApproval() {
-            alert('Order approved successfully!');
-            closeApprovalModal();
-        }
-
-        function submitRejection() {
-            alert('Order rejected. Requester will be notified.');
-            closeRejectionModal();
-        }
+function closeRejectionModal() {
+    document.getElementById('rejectionModal').classList.add('hidden');
+}
 </script>
 @endsection

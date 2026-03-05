@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Helpers\ActivityLogger;
 use App\Models\Approval;
 use App\Models\Driver;
 use App\Models\User;
@@ -89,6 +90,8 @@ class VehicleOrderController extends Controller
                 'level' => 2,
                 'status' => 'PENDING',
             ]);
+
+            ActivityLogger::log('Order Created', 'Order #' . $vehicleOrder->order_code . ' has been created by ' . $request->requester_name);
         });
 
         return redirect()->route('admin.orders')->with('success', 'Order kendaraan berhasil dibuat!');
@@ -96,6 +99,7 @@ class VehicleOrderController extends Controller
 
     public function show($id)
     {
-        return view('admin.orders.show');
+        $order = VehicleOrder::with(['vehicle', 'driver', 'approvals.approver'])->where('order_code', $id)->firstOrFail();
+        return view('admin.orders.show', compact('order'));
     }
 }

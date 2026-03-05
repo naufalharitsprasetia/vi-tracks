@@ -235,11 +235,11 @@
         <!-- Form Actions -->
         <div class="flex items-center gap-4 pt-8 border-t border-gray-200">
             <button type="submit"
-                class="px-8 py-3 bg-linear-to-r from-blue-600 to-indigo-600 text-white font-semibold rounded-lg hover:from-blue-700 hover:to-indigo-700 transition-all shadow-lg">
+                class="cursor-pointer px-8 py-3 bg-linear-to-r from-blue-600 to-indigo-600 text-white font-semibold rounded-lg hover:from-blue-700 hover:to-indigo-700 transition-all shadow-lg">
                 Buat Pesanan
             </button>
             <a href=""
-                class="px-8 py-3 border border-gray-300 text-gray-700 font-semibold rounded-lg hover:bg-gray-50 transition-all">
+                class="cursor-pointer px-8 py-3 border border-gray-300 text-gray-700 font-semibold rounded-lg hover:bg-gray-50 transition-all">
                 Batal
             </a>
         </div>

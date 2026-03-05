@@ -16,4 +16,8 @@ class VehicleOrder extends Model
     {
         return $this->belongsTo(Driver::class);
     }
+    public function approvals()
+    {
+        return $this->hasMany(Approval::class, 'vehicle_order_id', 'id');
+    }
 }
