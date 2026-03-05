@@ -2,11 +2,14 @@
 
 namespace App\Http\Controllers;
 
+use App\Exports\VehicleOrderExport;
 use App\Models\Approval;
 use App\Models\Log;
 use App\Models\VehicleOrder;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Maatwebsite\Excel\Facades\Excel;
 
 class DashboardController extends Controller
 {
@@ -69,9 +72,39 @@ class DashboardController extends Controller
         }
     }
 
-    public function reports()
+    public function reports(Request $request)
     {
-        return view('admin.reports');
+        $ordersDaily = $this->daily($request);
+
+        $tabDailyStartDate = $request->tabDaily_startDate ?? now()->toDateString();
+        $tabDailyEndDate = $request->tabDaily_endDate ?? now()->toDateString();
+
+        return view('admin.reports', compact('ordersDaily', 'tabDailyStartDate', 'tabDailyEndDate'));
+    }
+    private function daily(Request $request)
+    {
+        $start = $request->tabDaily_startDate
+            ? Carbon::parse($request->tabDaily_startDate)->startOfDay()
+            : now()->startOfDay();
+
+        $end = $request->tabDaily_endDate
+            ? Carbon::parse($request->tabDaily_endDate)->endOfDay()
+            : now()->endOfDay();
+
+        $ordersDaily = VehicleOrder::whereBetween('created_at', [$start, $end])->get();
+
+        return $ordersDaily;
+    }
+
+    public function exportDaily(Request $request)
+    {
+        $start = $request->start_date ?? now()->toDateString();
+        $end   = $request->end_date ?? now()->toDateString();
+
+        return Excel::download(
+            new VehicleOrderExport($start, $end),
+            'daily-vehicle-order-' . now()->format('Y-m-d') . '.xlsx'
+        );
     }
 
     public function logs()

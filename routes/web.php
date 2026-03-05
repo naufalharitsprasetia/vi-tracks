@@ -19,34 +19,39 @@ Route::group(['middleware' => 'auth'], function () {
     // Dashboard
     Route::get('/', [DashboardController::class, 'index'])->name('home');
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
-    // Reports
-    Route::get('/reports', [DashboardController::class, 'reports'])->name('admin.reports');
-    // Logs
-    Route::get('/logs', [DashboardController::class, 'logs'])->name('admin.logs');
 
-    // Orders
-    Route::get('/orders', [VehicleOrderController::class, 'index'])->name('admin.orders');
-    Route::get('/orders/new', [VehicleOrderController::class, 'create'])->name('admin.orders.create');
-    Route::post('/orders/new', [VehicleOrderController::class, 'store'])->name('admin.orders.store');
-    Route::get('/orders/{id}', [VehicleOrderController::class, 'show'])->name('admin.orders.show');
-    // Route::get('/orders/{id}/edit', [VehicleOrderController::class, 'edit'])->name('admin.orders.edit');
+    Route::group(['middleware' => 'admin'], function () {
+        // Reports
+        Route::get('/reports', [DashboardController::class, 'reports'])->name('admin.reports');
+        Route::get('/reports/daily/export', [DashboardController::class, 'exportDaily'])->name('admin.reports.daily.export');
+        // Logs
+        Route::get('/logs', [DashboardController::class, 'logs'])->name('admin.logs');
 
-    // Drivers
-    Route::get('/drivers', [DriverController::class, 'index'])->name('admin.drivers');
-    Route::get('/drivers/new', [DriverController::class, 'create'])->name('admin.drivers.create');
-    Route::post('/drivers', [DriverController::class, 'store'])->name('admin.drivers.store');
+        // Orders
+        Route::get('/orders', [VehicleOrderController::class, 'index'])->name('admin.orders');
+        Route::get('/orders/new', [VehicleOrderController::class, 'create'])->name('admin.orders.create');
+        Route::post('/orders/new', [VehicleOrderController::class, 'store'])->name('admin.orders.store');
+        Route::get('/orders/{id}', [VehicleOrderController::class, 'show'])->name('admin.orders.show');
+        // Route::get('/orders/{id}/edit', [VehicleOrderController::class, 'edit'])->name('admin.orders.edit');
 
-    // Vehicles
-    Route::get('/vehicles', [VehicleController::class, 'index'])->name('admin.vehicles');
-    Route::get('/vehicles/new', [VehicleController::class, 'create'])->name('admin.vehicles.create');
-    Route::post('/vehicles', [VehicleController::class, 'store'])->name('admin.vehicles.store');
+        // Drivers
+        Route::get('/drivers', [DriverController::class, 'index'])->name('admin.drivers');
+        Route::get('/drivers/new', [DriverController::class, 'create'])->name('admin.drivers.create');
+        Route::post('/drivers', [DriverController::class, 'store'])->name('admin.drivers.store');
 
-    // Approver
-    Route::get('/pending-approver', [ApprovalController::class, 'pendingApprovals'])->name('approver.pending');
-    Route::get('/history-approver', [ApprovalController::class, 'historyApprovals'])->name('approver.history');
-    Route::post('/approval-approve/{approval}', [ApprovalController::class, 'approve'])
-        ->name('approval.approve');
+        // Vehicles
+        Route::get('/vehicles', [VehicleController::class, 'index'])->name('admin.vehicles');
+        Route::get('/vehicles/new', [VehicleController::class, 'create'])->name('admin.vehicles.create');
+        Route::post('/vehicles', [VehicleController::class, 'store'])->name('admin.vehicles.store');
+    });
 
-    Route::post('/approval-reject/{approval}', [ApprovalController::class, 'reject'])
-        ->name('approval.reject');
+    Route::group(['middleware' => 'approver'], function () {
+        // Approver
+        Route::get('/pending-approver', [ApprovalController::class, 'pendingApprovals'])->name('approver.pending');
+        Route::get('/history-approver', [ApprovalController::class, 'historyApprovals'])->name('approver.history');
+        Route::post('/approval-approve/{approval}', [ApprovalController::class, 'approve'])
+            ->name('approval.approve');
+        Route::post('/approval-reject/{approval}', [ApprovalController::class, 'reject'])
+            ->name('approval.reject');
+    });
 });

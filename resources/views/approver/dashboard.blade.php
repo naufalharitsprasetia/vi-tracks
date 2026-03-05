@@ -161,8 +161,11 @@
                     </div>
                 </div>
 
-                <p class="text-sm text-gray-600 mb-4"><strong>Destination/Purpose:</strong> {{
+                <p class="text-sm text-gray-600 mb-1"><strong>Destination/Purpose:</strong> {{
                     $approval->order->destination }}
+                </p>
+                <p class="text-xs text-gray-600 mb-4"><strong>Additional Notes:</strong> {{
+                    $approval->order->notes }}
                 </p>
 
                 @if($approval->level == 1)
@@ -248,7 +251,7 @@
                 class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500 mb-4"
                 rows="3"></textarea>
             <div class="flex gap-3">
-                <button onclick="closeApprovalModal()"
+                <button onclick="closeApprovalModal()" type="button"
                     class="cursor-pointer flex-1 px-4 py-2 border border-gray-300 text-gray-700 font-semibold rounded-lg hover:bg-gray-50 transition-all">
                     Cancel
                 </button>

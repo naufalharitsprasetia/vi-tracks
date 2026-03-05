@@ -26,8 +26,9 @@ Aplikasi ini dibuat sebagai bagian dari **Technical Test Fullstack Developer (In
 - Menentukan kendaraan, driver, dan pemesan
 - Menentukan approver level 1 dan level 2
 - Melihat seluruh data pemesanan
-- Melihat dashboard dan laporan
+- Melihat dashboard
 - Melihat log aktifitas
+- Mengekspor laporan data pemesanan
 
 ### 2️⃣ Approver (Penyetuju)
 
@@ -42,11 +43,11 @@ Aplikasi ini dibuat sebagai bagian dari **Technical Test Fullstack Developer (In
 1. Admin membuat pemesanan kendaraan
 2. Approver Level 1 melakukan peninjauan awal dan menyetujuinya
 3. Approver Level 2 melakukan persetujuan akhir
-4. Status pemesanan akan berubah menjadi:
+4. Status pemesanan dapat berubah menjadi:
     - `PENDING`
     - `IN PROGRESS`
-    - `APPROVED`
     - `REJECTED`
+    - `APPROVED`
     - `IN USE`
     - `COMPLETED`
 
@@ -80,7 +81,7 @@ Aplikasi ini dibuat sebagai bagian dari **Technical Test Fullstack Developer (In
 - id
 - brand
 - plate_number
-- type (angkutan_orang / angkutan_barang)
+- vehicle_type (angkutan_orang / angkutan_barang)
 - ownership (company / rental)
 - status
 - created_at
@@ -89,6 +90,7 @@ Aplikasi ini dibuat sebagai bagian dari **Technical Test Fullstack Developer (In
 
 - id
 - name
+- address
 - phone
 - created_at
 
@@ -102,6 +104,7 @@ Aplikasi ini dibuat sebagai bagian dari **Technical Test Fullstack Developer (In
 - booking_date
 - return_date
 - status
+- notes
 - created_at
 
 ### approvals
@@ -147,6 +150,8 @@ Dashboard menampilkan:
     - Completed
     - Pending
     - Rejected
+    - In Progress
+    - In Use
 
 ---
 
@@ -161,9 +166,9 @@ Dashboard menampilkan:
 
 | Role             | Email                 | Password |
 | ---------------- | --------------------- | -------- |
-| Admin            | admin@vitracks.com    | password |
-| Approver Level 1 | manager@vitracks.com  | password |
-| Approver Level 2 | director@vitracks.com | password |
+| Admin            | admin@vitracks.com    | 12345678 |
+| Approver Level 1 | manager@vitracks.com  | 12345678 |
+| Approver Level 2 | director@vitracks.com | 12345678 |
 
 ---
 
@@ -190,7 +195,15 @@ http://127.0.0.1:8000
 
 - Aplikasi menggunakan soft logic approval sehingga mudah dikembangkan menjadi 3 level atau lebih
 - Struktur database mendukung pengembangan fitur BBM dan service kendaraan untuk tahap pengembangan selanjutnya
-- UI dibuat responsive dan mobile-friendly
+- Aplikasi ini dibuat dengan memprioritaskan MVP (Minimum Viable Product)
+
+## Activity Diagram Preview
+
+![Activity Diagram](public/activitydiagram.png)
+
+## PDM (Physical Data Model)
+
+![PDM](public/pdm.png)
 
 ## 👨‍💻 Author
 

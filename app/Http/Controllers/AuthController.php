@@ -40,6 +40,10 @@ class AuthController extends Controller
 
     public function logout(Request $request)
     {
+        ActivityLogger::log(
+            'LOGOUT',
+            'User (' . Auth::user()->name . ') logout dari sistem'
+        );
         Auth::logout();
         $request->session()->invalidate();
         $request->session()->regenerateToken();

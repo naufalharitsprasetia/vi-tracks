@@ -30,8 +30,8 @@
                     <td class="px-6 py-4 text-gray-600">{{ $vehicle->brand }}</td>
                     <td class="px-6 py-4 text-gray-700">{{ $vehicle->fuel_type }}</td>
                     <td class="px-6 py-4">
-                        <a href="#" class="text-yellow-600 hover:text-yellow-800 font-semibold text-sm">Edit</a>
-                        <a href="#" class="text-red-600 hover:text-red-800 font-semibold text-sm">Delete</a>
+                        {{-- <a href="#" class="text-yellow-600 hover:text-yellow-800 font-semibold text-sm">Edit</a>
+                        <a href="#" class="text-red-600 hover:text-red-800 font-semibold text-sm">Delete</a> --}}
                     </td>
                 </tr>
                 @endforeach
