@@ -193,9 +193,9 @@ http://127.0.0.1:8000
 
 ## 📝 Catatan Tambahan
 
-- Aplikasi menggunakan soft logic approval sehingga mudah dikembangkan menjadi 3 level atau lebih
-- Struktur database mendukung pengembangan fitur BBM dan service kendaraan untuk tahap pengembangan selanjutnya
-- Aplikasi ini dibuat dengan memprioritaskan MVP (Minimum Viable Product)
+- Implementasi saat ini berfokus pada core flow aplikasi (order, approval, dan reporting).
+- Beberapa fitur non-kritis belum diimplementasikan secara penuh akibat keterbatasan waktu pada fase pengembangan awal.
+- Desain sistem dibuat modular dan scalable untuk memudahkan penambahan fitur di iterasi berikutnya.
 
 ## Activity Diagram Preview
 
